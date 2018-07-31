@@ -6,24 +6,43 @@
 // extend System.Reflection with a Zip file assembly loader.
 namespace System.Reflection
 {
-    // TODO: Somehow have the path to the assembly
-    // display as inside the zip file as if it was
-    // not loaded from a zip file.
     /// <summary>
     /// Load assemblies from a zip file.
     /// </summary>
-    public static class ZipAssembly
+    public sealed class ZipAssembly : Assembly
     {
+        // always set to Zip file full path + \\ + file path in zip.
+        internal string _location;
+        internal Assembly _assembly;
+
+        /// <summary>
+        /// Gets the Assembly associated with this ZipAssembly instance.
+        /// </summary>
+        public Assembly assembly => _assembly;
+
+        // hopefully this has the path to the assembly on System.Reflection.Assembly.Location output with the value from this override.
+        /// <summary>
+        /// Gets the location of the assembly in the zip file.
+        /// </summary>
+        public override string Location => _location;
+
+        /// <summary>
+        /// Load assemblies from a zip file.
+        /// </summary>
+        public ZipAssembly()
+        {
+        }
+
         /// <summary>
         /// Loads the assembly from the specified zip file.
         /// </summary>
-        public static System.Reflection.Assembly LoadFromZip(string ZipFileName, string AssemblyName) => LoadFromZip(ZipFileName, AssemblyName, false);
+        public static ZipAssembly LoadFromZip(string ZipFileName, string AssemblyName) => LoadFromZip(ZipFileName, AssemblyName, false);
 
         /// <summary>
         /// Loads the assembly with it’s debugging symbols
         /// from the specified zip file.
         /// </summary>
-        public static System.Reflection.Assembly LoadFromZip(string ZipFileName, string AssemblyName, bool LoadPDBFile)
+        public static ZipAssembly LoadFromZip(string ZipFileName, string AssemblyName, bool LoadPDBFile)
         {
             // check if the assembly is in the zip file.
             // If it is, get it’s bytes then load it.
@@ -73,7 +92,10 @@ namespace System.Reflection
             // PDB should be automatically downloaded to zip file always
             // and really *should* always be present.
             bool LoadPDB = LoadPDBFile ? LoadPDBFile : System.Diagnostics.Debugger.IsAttached;
-            return LoadPDB ? System.Reflection.Assembly.Load(asmbytes, pdbbytes) : System.Reflection.Assembly.Load(asmbytes);
+            ZipAssembly Zipassembly = new ZipAssembly();
+            Zipassembly._location =  ZipFileName + System.IO.Path.DirectorySeparatorChar + AssemblyName;
+            Zipassembly._assembly = LoadPDB ? Assembly.Load(asmbytes, pdbbytes) : Assembly.Load(asmbytes);
+            return Zipassembly;
         }
     }
 }
