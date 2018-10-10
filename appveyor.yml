@@ -1,0 +1,24 @@
+version: 1.0.2.0-alpha{build}
+branches:
+  only:
+  - master
+max_jobs: 15
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+before_build:
+- ps: nuget restore
+build:
+  project: System.Reflection.ZipAssembly.sln
+  publish_nuget: true
+  publish_nuget_symbols: true
+  include_nuget_references: true
+  parallel: true
+  verbosity: minimal
+test: off
+deploy:
+- provider: NuGet
+  api_key:
+    secure: w8jKLcMWVbTVBRRjl6k2eoRvajr5DpIB4XBhlEddCvx/9dSnDYbK5J0qXZXazE/E
+  on:
+    APPVEYOR_REPO_TAG: true

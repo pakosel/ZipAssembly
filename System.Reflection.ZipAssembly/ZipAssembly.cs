@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2018, Els_kom org.
+// Copyright (c) 2018, Els_kom org.
 // https://github.com/Elskom/
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
@@ -6,6 +6,10 @@
 // extend System.Reflection with a Zip file assembly loader.
 namespace System.Reflection
 {
+    using System.Diagnostics;
+    using System.IO;
+    using System.IO.Compression;
+
     /// <summary>
     /// Load assemblies from a zip file.
     /// </summary>
@@ -53,14 +57,14 @@ namespace System.Reflection
             byte[] asmbytes = null;
             byte[] pdbbytes = null;
             string pdbFileName = AssemblyName.Replace("dll", "pdb");
-            System.IO.Compression.ZipArchive zipFile = System.IO.Compression.ZipFile.OpenRead(ZipFileName);
+            ZipArchive zipFile = ZipFile.OpenRead(ZipFileName);
             foreach (var entry in zipFile.Entries)
             {
                 if (entry.FullName.Equals(AssemblyName))
                 {
                     found = true;
-                    System.IO.Stream strm = entry.Open();
-                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                    Stream strm = entry.Open();
+                    MemoryStream ms = new MemoryStream();
                     strm.CopyTo(ms);
                     asmbytes = ms.ToArray();
                     ms.Dispose();
@@ -69,8 +73,8 @@ namespace System.Reflection
                 else if (entry.FullName.Equals(pdbFileName))
                 {
                     pdbfound = true;
-                    System.IO.Stream strm = entry.Open();
-                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                    Stream strm = entry.Open();
+                    MemoryStream ms = new MemoryStream();
                     strm.CopyTo(ms);
                     pdbbytes = ms.ToArray();
                     ms.Dispose();
@@ -91,9 +95,9 @@ namespace System.Reflection
             // always load pdb when debugging.
             // PDB should be automatically downloaded to zip file always
             // and really *should* always be present.
-            bool LoadPDB = LoadPDBFile ? LoadPDBFile : System.Diagnostics.Debugger.IsAttached;
+            bool LoadPDB = LoadPDBFile ? LoadPDBFile : Debugger.IsAttached;
             ZipAssembly Zipassembly = new ZipAssembly();
-            Zipassembly._location =  ZipFileName + System.IO.Path.DirectorySeparatorChar + AssemblyName;
+            Zipassembly._location =  ZipFileName + Path.DirectorySeparatorChar + AssemblyName;
             Zipassembly._assembly = LoadPDB ? Assembly.Load(asmbytes, pdbbytes) : Assembly.Load(asmbytes);
             return Zipassembly;
         }
