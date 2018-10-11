@@ -11,21 +11,22 @@ namespace System.Reflection
     /// A exception that is raised when the
     /// assembly cannot be loaded from a zip file.
     /// </summary>
-    public class  ZipAssemblyLoadException : Exception
+    public class ZipAssemblyLoadException : Exception
     {
         /// <summary>
-        /// A exception that is raised when the
-        /// assembly cannot be loaded from a zip file.
+        /// Initializes a new instance of the <see cref="ZipAssemblyLoadException"/> class.
         /// </summary>
-        public ZipAssemblyLoadException() : base()
+        public ZipAssemblyLoadException()
+            : base()
         {
         }
 
         /// <summary>
-        /// A exception that is raised when the
-        /// assembly cannot be loaded from a zip file.
+        /// Initializes a new instance of the <see cref="ZipAssemblyLoadException"/> class.
         /// </summary>
-        public ZipAssemblyLoadException(string str) : base(str)
+        /// <param name="str">Str name.</param>
+        public ZipAssemblyLoadException(string str)
+            : base(str)
         {
         }
     }

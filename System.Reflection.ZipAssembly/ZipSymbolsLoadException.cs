@@ -11,21 +11,22 @@ namespace System.Reflection
     /// A exception that is raised when the symbols to an
     /// assembly cannot be loaded from a zip file.
     /// </summary>
-    public class  ZipSymbolsLoadException : Exception
+    public class ZipSymbolsLoadException : Exception
     {
         /// <summary>
-        /// A exception that is raised when the symbols to an
-        /// assembly cannot be loaded from a zip file.
+        /// Initializes a new instance of the <see cref="ZipSymbolsLoadException"/> class.
         /// </summary>
-        public ZipSymbolsLoadException() : base()
+        public ZipSymbolsLoadException()
+            : base()
         {
         }
 
         /// <summary>
-        /// A exception that is raised when the symbols to an
-        /// assembly cannot be loaded from a zip file.
+        /// Initializes a new instance of the <see cref="ZipSymbolsLoadException"/> class.
         /// </summary>
-        public ZipSymbolsLoadException(string str) : base(str)
+        /// <param name="str">Str name.</param>
+        public ZipSymbolsLoadException(string str)
+            : base(str)
         {
         }
     }
