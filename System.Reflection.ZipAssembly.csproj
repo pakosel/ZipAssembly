@@ -50,6 +50,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.IO.Compression" Condition="'$(TargetFramework)' == 'net451' OR '$(TargetFramework)' == 'net452' OR '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net40' OR '$(TargetFramework)' == 'net46' OR '$(TargetFramework)' == 'net461' OR '$(TargetFramework)' == 'net462' OR '$(TargetFramework)' == 'net47' OR '$(TargetFramework)' == 'net471' OR '$(TargetFramework)' == 'net472'" />
+    <Reference Include="System.IO.Compression" Condition="'$(TargetFramework.StartsWith('net4'))'" />
   </ItemGroup>
 </Project>
